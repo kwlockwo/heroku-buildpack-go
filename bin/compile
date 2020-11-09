@@ -483,7 +483,9 @@ case "${TOOL}" in
 
         step "Determining packages to install"
         pkgs=${GO_INSTALL_PACKAGE_SPEC:-$(awk '{ if ($1 == "//" && $2 == "+heroku" && $3 == "install" ) { print substr($0, index($0,$4)); exit }}' ${goMOD})}
+        echo "here-1"
         if [ -z "${pkgs}" ]; then
+            echo "here-2"
             pkgs=$(mainPackagesInModule)
             if [ -z "${pkgs}" ]; then
                 warn ""
@@ -503,9 +505,12 @@ case "${TOOL}" in
                 mcount "pkginstall.auto"
             fi
         else
+            echo "here-3"
             if [ -z "${GO_INSTALL_PACKAGE_SPEC}" ]; then
+                echo "here-4"
                 mcount "pkginstall.go_install_package_spec"
             else
+                echo "here-5"
                 mcount "pkginstall.heroku_install"
             fi
         fi
