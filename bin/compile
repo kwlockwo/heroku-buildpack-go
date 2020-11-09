@@ -487,6 +487,7 @@ case "${TOOL}" in
         if [ -z "${pkgs}" ]; then
             echo "here-2"
             pkgs=$(mainPackagesInModule)
+            echo "here-6"
             if [ -z "${pkgs}" ]; then
                 warn ""
                 warn "No main packages found in module ${name}"
@@ -514,6 +515,8 @@ case "${TOOL}" in
                 mcount "pkginstall.heroku_install"
             fi
         fi
+        
+        echo "here-7"
 
         if [[ "${pkgs}" =~ "..." ]]; then
             mcount "package_spec.contains.dot_dot_dot"
