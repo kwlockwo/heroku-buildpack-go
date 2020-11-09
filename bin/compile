@@ -424,7 +424,6 @@ mcount "pkgmanagement.$TOOL"
 
 mainPackagesInModule() {
   # For an explanation of what this is doing, see https://dave.cheney.net/2014/09/14/go-list-your-swiss-army-knife
-  echo "here ${FLAGS[@]}"
   go list -find "${FLAGS[@]}" -f '{{ if eq .Name "main" }} {{.ImportPath}} {{ end }}' ./... 2>/dev/null
 }
 
@@ -484,11 +483,8 @@ case "${TOOL}" in
 
         step "Determining packages to install"
         pkgs=${GO_INSTALL_PACKAGE_SPEC:-$(awk '{ if ($1 == "//" && $2 == "+heroku" && $3 == "install" ) { print substr($0, index($0,$4)); exit }}' ${goMOD})}
-        echo "here-1"
         if [ -z "${pkgs}" ]; then
-            echo "here-2"
             pkgs=$(mainPackagesInModule)
-            echo "here-6"
             if [ -z "${pkgs}" ]; then
                 warn ""
                 warn "No main packages found in module ${name}"
@@ -507,17 +503,12 @@ case "${TOOL}" in
                 mcount "pkginstall.auto"
             fi
         else
-            echo "here-3"
             if [ -z "${GO_INSTALL_PACKAGE_SPEC}" ]; then
-                echo "here-4"
                 mcount "pkginstall.go_install_package_spec"
             else
-                echo "here-5"
                 mcount "pkginstall.heroku_install"
             fi
         fi
-        
-        echo "here-7"
 
         if [[ "${pkgs}" =~ "..." ]]; then
             mcount "package_spec.contains.dot_dot_dot"
@@ -534,7 +525,9 @@ case "${TOOL}" in
             bin/go-pre-compile
         fi
 
+        echo "installing packages"
         installPkgs
+        echo "packages installed"
 
         if [[ -f bin/go-post-compile ]]; then
             step "Running bin/go-post-compile hook"
